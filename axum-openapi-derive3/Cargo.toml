@@ -1,0 +1,13 @@
+[package]
+name = "axum-openapi-derive3"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "*", features = ["extra-traits", "full"] }
+quote = "*"
+proc-macro2 = "*"
+http = "1.1.0"
