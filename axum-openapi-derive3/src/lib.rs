@@ -5,6 +5,7 @@ use handler_signature::{parse_handler_arguments, parse_handler_ret_type, Handler
 use macro_arguments::MacroArgs;
 use quote::quote;
 use syn::{parse_macro_input, spanned::Spanned, ItemFn};
+use std::fmt::Write;
 
 mod handler_signature;
 mod macro_arguments;
@@ -124,7 +125,7 @@ let op_builder = op_builder.response(
     ret_type
 }
 
-fn get_request_body_token(fn_args: &Vec<HandlerArgument>) -> proc_macro2::TokenStream {
+fn get_request_body_token(fn_args: &[HandlerArgument]) -> proc_macro2::TokenStream {
     let request_body = fn_args.iter().find_map(|arg| match arg {
         HandlerArgument::RequestBody(ty) => Some(format!(
             r#"
@@ -165,7 +166,7 @@ fn get_state_token(fn_args: Vec<HandlerArgument>) -> proc_macro2::TokenStream {
 }
 
 fn get_path_params_token(
-    fn_args: &Vec<HandlerArgument>,
+    fn_args: &[HandlerArgument],
     path_param_names: Vec<String>,
 ) -> proc_macro2::TokenStream {
     let path_params: String = fn_args
@@ -175,9 +176,8 @@ fn get_path_params_token(
             _ => None,
         })
         .zip(path_param_names.iter())
-        .map(|(ty, name)| {
-            format!(
-                r#"
+        .fold(String::new(), |mut acc, (ty, name)| {
+            let _ = write!(acc, r#"
 let schema = < {ty} as axum_openapi3::utoipa::PartialSchema > :: schema();
 let path_param = axum_openapi3::utoipa::openapi::path::ParameterBuilder::new()
     .parameter_in(axum_openapi3::utoipa::openapi::path::ParameterIn::Path)
@@ -188,10 +188,9 @@ let path_param = axum_openapi3::utoipa::openapi::path::ParameterBuilder::new()
 
 let op_builder = op_builder
     .parameter(path_param);
-"#
-            )
-        })
-        .collect();
+"#);
+            acc
+        });
     let path_params: proc_macro2::TokenStream = if path_params.is_empty() {
         "let op_builder = op_builder;".parse().unwrap()
     } else {
@@ -200,7 +199,7 @@ let op_builder = op_builder
     path_params
 }
 
-fn get_query_params_token(fn_args: &Vec<HandlerArgument>) -> proc_macro2::TokenStream {
+fn get_query_params_token(fn_args: &[HandlerArgument]) -> proc_macro2::TokenStream {
     let query_params = fn_args.iter().find_map(|arg| {
         match arg {
             HandlerArgument::Query(ty) => Some(format!(r#"
@@ -255,8 +254,8 @@ fn transform_route(route: &str) -> String {
     route
         .split('/') // Split the route by '/'
         .map(|segment| {
-            if segment.starts_with(':') {
-                format!("{{{}}}", &segment[1..]) // Replace ':id' with '{id}'
+            if let Some(stripped) = segment.strip_prefix(':') {
+                format!("{{{}}}", stripped) // Replace ':id' with '{id}'
             } else {
                 segment.to_string() // Keep other segments unchanged
             }
