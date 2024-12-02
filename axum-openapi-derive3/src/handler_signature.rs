@@ -75,9 +75,7 @@ pub fn parse_handler_arguments(sig: &Signature) -> Result<Vec<HandlerArgument>, 
 
 pub fn parse_handler_ret_type(sig: &Signature) -> Result<Option<String>, syn::Error> {
     match &sig.output {
-        syn::ReturnType::Default => {
-            Err(syn::Error::new(sig.output.span(), "Expected return type"))
-        }
+        syn::ReturnType::Default => Err(syn::Error::new(sig.output.span(), "Expected return type")),
         syn::ReturnType::Type(_, ty) => match ty.as_ref() {
             syn::Type::Path(path) => {
                 let mut v = vec![];

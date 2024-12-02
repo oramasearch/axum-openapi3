@@ -4,8 +4,8 @@
 use handler_signature::{parse_handler_arguments, parse_handler_ret_type, HandlerArgument};
 use macro_arguments::MacroArgs;
 use quote::quote;
-use syn::{parse_macro_input, spanned::Spanned, ItemFn};
 use std::fmt::Write;
+use syn::{parse_macro_input, spanned::Spanned, ItemFn};
 
 mod handler_signature;
 mod macro_arguments;
@@ -177,7 +177,9 @@ fn get_path_params_token(
         })
         .zip(path_param_names.iter())
         .fold(String::new(), |mut acc, (ty, name)| {
-            let _ = write!(acc, r#"
+            let _ = write!(
+                acc,
+                r#"
 let schema = < {ty} as axum_openapi3::utoipa::PartialSchema > :: schema();
 let path_param = axum_openapi3::utoipa::openapi::path::ParameterBuilder::new()
     .parameter_in(axum_openapi3::utoipa::openapi::path::ParameterIn::Path)
@@ -188,7 +190,8 @@ let path_param = axum_openapi3::utoipa::openapi::path::ParameterBuilder::new()
 
 let op_builder = op_builder
     .parameter(path_param);
-"#);
+"#
+            );
             acc
         });
     let path_params: proc_macro2::TokenStream = if path_params.is_empty() {

@@ -33,7 +33,7 @@ jobs:
     - name: Check & Fmt & Clippy
       run: |
         cargo check --workspace
-        cargo fmt
+        cargo fmt --check --all
         cargo clippy --workspace
     - name: Test
       run: |
