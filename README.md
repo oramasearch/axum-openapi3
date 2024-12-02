@@ -99,3 +99,8 @@ async fn main() {
 - No nested routes: `axum` allows nested routes, but this library does not support them: the endpoints must be defined at the root level of the router.
 - Only one http server per process: `axum-openapi3` uses a global cache to store the OpenAPI spec, so it's not possible to have more than one http server per process.
 - Only `Json` responses: the library only supports `Json` responses. Other response types are not supported. The endpoint will be generated, but with empty response.
+
+
+## License
+
+Licensed under Apache License, Version 2.0, ([LICENSE](LICENSE))
