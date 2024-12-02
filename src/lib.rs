@@ -11,10 +11,10 @@ use serde::Serialize;
 use utoipa::openapi::Paths;
 
 #[cfg(feature = "derive")]
-extern crate axum_openapi_derive3;
+extern crate axum_openapi3_derive;
 /// Derive macro available if axum-openapi3 is built with `features = ["derive"]`.
 #[cfg(feature = "derive")]
-pub use axum_openapi_derive3::endpoint;
+pub use axum_openapi3_derive::endpoint;
 
 /// Re-export utoipa. Used internally to generate the openapi spec from rust structs.
 pub use utoipa;

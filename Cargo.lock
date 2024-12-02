@@ -108,28 +108,28 @@ dependencies = [
 ]
 
 [[package]]
-name = "axum-openapi-derive3"
-version = "0.1.0"
-dependencies = [
- "http",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "axum-openapi3"
 version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
- "axum-openapi-derive3",
+ "axum-openapi3-derive",
  "once_cell",
  "serde",
  "serde_json",
  "tokio",
  "tower-http",
  "utoipa",
+]
+
+[[package]]
+name = "axum-openapi3-derive"
+version = "0.1.0"
+dependencies = [
+ "http",
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]

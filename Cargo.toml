@@ -2,11 +2,20 @@
 name = "axum-openapi3"
 version = "0.1.0"
 edition = "2021"
+description = "Facilitate the generation of OpenAPI 3.0 documentation for axum applications."
+license = "Apache-2.0"
+authors = [
+  "Tommaso Allevi <tomallevi@gmail.com>",
+]
+documentation = "https://docs.rs/axum-openapi3"
+repository = "https://github.com/oramasearch/axum-openapi3"
+homepage = "https://crates.io/crates/axum-openapi3"
+
 
 [lib]
 
 [dependencies]
-axum-openapi-derive3 = { optional = true, path = "axum-openapi-derive3"}
+axum-openapi3-derive = { optional = true, path = "axum-openapi3-derive"}
 axum = { version = "0.7.6", default-features = false }
 utoipa = { version = "5", features = ["debug"] }
 once_cell = "1.8.0"
@@ -18,18 +27,15 @@ tower-http = { version = "0.6.1", features = ["trace", "cors"] }
 serde = { version = "1.0.214", features = ["derive"] }
 tokio = { version = "1", features = ["rt", "rt-multi-thread", "full", "sync"] }
 anyhow = "1.0.91"
-
 serde_json = "1.0.132"
-
 
 [features]
 default = ["derive"]
 
-# Provide derive(Serialize, Deserialize) macros.
-derive = ["axum-openapi-derive3"]
+derive = ["axum-openapi3-derive"]
 
 
 [workspace]
 members = [
-    "axum-openapi-derive3",
+    "axum-openapi3-derive",
 ]
