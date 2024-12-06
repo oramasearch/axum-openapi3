@@ -2,6 +2,14 @@
 name = "axum-openapi3-derive"
 version = "0.1.0"
 edition = "2021"
+description = "Facilitate the generation of OpenAPI 3.0 documentation for axum applications - derive macro"
+license = "Apache-2.0"
+authors = [
+  "Tommaso Allevi <tomallevi@gmail.com>",
+]
+documentation = "https://docs.rs/axum-openapi3-derive"
+repository = "https://github.com/oramasearch/axum-openapi3"
+homepage = "https://crates.io/crates/axum-openapi3-derive"
 
 [lib]
 proc-macro = true
@@ -10,4 +18,4 @@ proc-macro = true
 syn = { version = "*", features = ["extra-traits", "full"] }
 quote = "*"
 proc-macro2 = "*"
-http = "1.1.0"
+http = "1"
