@@ -16,6 +16,6 @@ proc-macro = true
 
 [dependencies]
 syn = { version = "2", features = ["extra-traits", "full"] }
-quote = "*"
+quote = "1"
 proc-macro2 = "1"
 http = "1"
