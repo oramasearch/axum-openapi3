@@ -113,7 +113,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
- "axum-openapi3-derive 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "axum-openapi3-derive",
  "once_cell",
  "serde",
  "serde_json",
@@ -125,18 +125,6 @@ dependencies = [
 [[package]]
 name = "axum-openapi3-derive"
 version = "0.1.0"
-dependencies = [
- "http",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
-name = "axum-openapi3-derive"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3505fed0a4a723d679a7f3f970d510d24ac936d9dd98657dfce76bc03307ff24"
 dependencies = [
  "http",
  "proc-macro2",
