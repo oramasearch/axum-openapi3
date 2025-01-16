@@ -89,13 +89,13 @@ async fn generic() -> impl IntoResponse {
     unreachable!("")
 }
 
-#[endpoint(method = "GET", path = "/todos/:id", description = "Get todo by id")]
+#[endpoint(method = "GET", path = "/todos/{id}", description = "Get todo by id")]
 async fn get_todo(Path(_): Path<u64>) -> Json<Todo> {
     unreachable!("")
 }
 #[endpoint(
     method = "PATCH",
-    path = "/todos/:id/complete",
+    path = "/todos/{id}/complete",
     description = "Mark a todo as ..."
 )]
 async fn mark_todo_as(_: Path<u64>, _: Json<bool>) -> Json<Todo> {
@@ -279,6 +279,8 @@ fn assert_endpoint(
     } else {
         assert!(expected_query_parameters.is_none());
     }
+
+    println!("&operation.parameters {:#?}", operation.parameters);
 
     if let Some(par) = &operation.parameters {
         let path_params: Vec<_> = par

@@ -42,7 +42,7 @@ async fn insert_todo(_: Json<Todo>) -> Json<Todo> {
 }
 #[endpoint(
     method = "PATCH",
-    path = "/todos/:id/complete",
+    path = "/todos/{id}/complete",
     description = "Mark a todo as completed"
 )]
 async fn mark_todo_as_complete(_: Path<u64>, _: Json<u64>) -> Json<Todo> {

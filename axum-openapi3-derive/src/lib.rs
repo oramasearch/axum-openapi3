@@ -244,8 +244,8 @@ fn extract_params(input: &str) -> Vec<String> {
     input
         .split('/')
         .filter_map(|segment| {
-            if segment.starts_with(':') {
-                Some(segment.trim_start_matches(':').to_string())
+            if segment.starts_with('{') && segment.ends_with("}") {
+                Some(segment.trim_start_matches('{').trim_end_matches("}").to_string())
             } else {
                 None
             }
@@ -271,17 +271,17 @@ fn transform_route(route: &str) -> String {
 mod tests {
     #[test]
     fn test_extract_params() {
-        assert_eq!(super::extract_params("/foo/:id/bar"), vec!["id"]);
+        assert_eq!(super::extract_params("/foo/{id}/bar"), vec!["id"]);
         assert_eq!(
-            super::extract_params("/foo/:id/bar/:baz"),
+            super::extract_params("/foo/{id}/bar/{baz}"),
             vec!["id", "baz"]
         );
         assert_eq!(
-            super::extract_params("/foo/:id/bar/:baz/"),
+            super::extract_params("/foo/{id}/bar/{baz}/"),
             vec!["id", "baz"]
         );
         assert_eq!(
-            super::extract_params("/foo/:id/bar/:baz/:qux"),
+            super::extract_params("/foo/{id}/bar/{baz}/:qux"),
             vec!["id", "baz", "qux"]
         );
     }
