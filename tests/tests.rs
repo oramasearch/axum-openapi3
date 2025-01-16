@@ -280,8 +280,6 @@ fn assert_endpoint(
         assert!(expected_query_parameters.is_none());
     }
 
-    println!("&operation.parameters {:#?}", operation.parameters);
-
     if let Some(par) = &operation.parameters {
         let path_params: Vec<_> = par
             .iter()
