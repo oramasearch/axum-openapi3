@@ -286,7 +286,7 @@ mod tests {
             vec!["id", "baz"]
         );
         assert_eq!(
-            super::extract_params("/foo/{id}/bar/{baz}/:qux"),
+            super::extract_params("/foo/{id}/bar/{baz}/{qux}"),
             vec!["id", "baz", "qux"]
         );
     }
