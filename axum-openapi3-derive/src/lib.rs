@@ -245,7 +245,12 @@ fn extract_params(input: &str) -> Vec<String> {
         .split('/')
         .filter_map(|segment| {
             if segment.starts_with('{') && segment.ends_with("}") {
-                Some(segment.trim_start_matches('{').trim_end_matches("}").to_string())
+                Some(
+                    segment
+                        .trim_start_matches('{')
+                        .trim_end_matches("}")
+                        .to_string(),
+                )
             } else {
                 None
             }
