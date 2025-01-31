@@ -1,5 +1,9 @@
+#![allow(dead_code)]
+
+use std::sync::Arc;
+
 use axum::{
-    extract::{Path, Query},
+    extract::{Path, Query, State},
     response::IntoResponse,
     Json, Router,
 };
@@ -13,6 +17,8 @@ use utoipa::openapi::{
     path::{Parameter, ParameterBuilder, ParameterIn},
     OpenApiBuilder, Required,
 };
+
+struct MyState;
 
 pub fn get_router() -> Router {
     let mut router = Router::new();
@@ -29,7 +35,11 @@ pub fn get_router() -> Router {
         .add(mark_todo_as())
         .add(generic());
 
-    router
+    let router2: Router = Router::new()
+        .add(query_and_json())
+        .with_state(Arc::new(MyState));
+
+    router.merge(router2)
 }
 
 #[endpoint(method = "GET", path = "/", description = "Welcome")]
@@ -100,6 +110,26 @@ async fn get_todo(Path(_): Path<u64>) -> Json<Todo> {
 )]
 async fn mark_todo_as(_: Path<u64>, _: Json<bool>) -> Json<Todo> {
     unreachable!("")
+}
+
+#[derive(Deserialize, IntoParams)]
+struct QueryParams {
+    #[serde(rename = "api-key")]
+    api_key: String,
+}
+#[derive(Deserialize, ToSchema)]
+struct MyJson {
+    ids: Vec<u64>,
+}
+
+#[endpoint(method = "POST", path = "/query-and-json/{id}", description = "")]
+async fn query_and_json(
+    _: Path<String>,
+    _: Query<QueryParams>,
+    _: State<Arc<MyState>>,
+    _: Json<MyJson>,
+) -> Json<String> {
+    unreachable!("");
 }
 
 #[test]
@@ -222,6 +252,23 @@ fn test_all() {
         None,
         None,
         None,
+    );
+
+    assert_endpoint(
+        paths,
+        "/query-and-json/{id}",
+        "post",
+        "query_and_json",
+        "",
+        None,
+        Some(MyJson::schema()),
+        Some(QueryParams::into_params(|| Some(ParameterIn::Query))),
+        Some(vec![ParameterBuilder::new()
+            .parameter_in(ParameterIn::Path)
+            .name("id")
+            .required(Required::True)
+            .schema(Some(String::schema()))
+            .build()]),
     );
 }
 
