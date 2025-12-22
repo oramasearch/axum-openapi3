@@ -5,14 +5,12 @@ pub struct MacroArgs {
     pub method: http::Method,
     pub path: String,
     pub description: Option<String>,
-    pub public: bool,
 }
 impl Parse for MacroArgs {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         let mut method = None;
         let mut path = None;
         let mut description = None;
-        let mut public = false;
 
         while !input.is_empty() {
             // Parse key-value pairs
@@ -57,19 +55,6 @@ impl Parse for MacroArgs {
                     },
                     _ => return Err(syn::Error::new(meta.path.span(), "Expected literal")),
                 };
-            } else if meta.path.is_ident("public") {
-                public = match meta.value {
-                    Expr::Lit(s) => match s.lit {
-                        Lit::Bool(lit) => lit.value,
-                        _ => {
-                            return Err(syn::Error::new(
-                                meta.path.span(),
-                                "Expected literal boolean",
-                            ))
-                        }
-                    },
-                    _ => return Err(syn::Error::new(meta.path.span(), "Expected literal boolean")),
-                }
             } else {
                 return Err(syn::Error::new(meta.path.span(), "Unexpected argument"));
             }
@@ -94,7 +79,6 @@ impl Parse for MacroArgs {
             method,
             path,
             description,
-            public,
         })
     }
 }

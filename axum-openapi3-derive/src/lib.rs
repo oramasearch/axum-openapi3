@@ -61,7 +61,7 @@ pub fn endpoint(
 
     let path_for_openapi = transform_route(&path);
 
-    let public = get_public_token(macro_args.public);
+    let public = get_public_token(&input_fn.vis);
 
     let output = quote! {
         #public fn #fn_name() -> (&'static str, axum::routing::MethodRouter < #state , std::convert::Infallible >)
@@ -167,11 +167,10 @@ fn get_state_token(fn_args: Vec<HandlerArgument>) -> proc_macro2::TokenStream {
     state
 }
 
-fn get_public_token(public: bool) -> proc_macro2::TokenStream {
-    let public: proc_macro2::TokenStream = if public {
-        "pub ".parse().unwrap()
-    } else {
-        "".parse().unwrap()
+fn get_public_token(public: &syn::Visibility) -> proc_macro2::TokenStream {
+    let public: proc_macro2::TokenStream = match public {
+        syn::Visibility::Public(_) => "pub ".parse().unwrap(),
+        _ => "".parse().unwrap(),
     };
     public
 }
