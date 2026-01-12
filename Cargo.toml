@@ -1,6 +1,6 @@
 [package]
 name = "axum-openapi3"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 description = "Facilitate the generation of OpenAPI 3.0 documentation for axum applications."
 license = "Apache-2.0"
