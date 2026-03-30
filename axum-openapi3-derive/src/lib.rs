@@ -3,7 +3,7 @@
 
 use handler_signature::{parse_handler_arguments, parse_handler_ret_type, HandlerArgument};
 use macro_arguments::MacroArgs;
-use quote::quote;
+use quote::{ToTokens, quote};
 use std::fmt::Write;
 use syn::{parse_macro_input, spanned::Spanned, ItemFn};
 
@@ -168,11 +168,7 @@ fn get_state_token(fn_args: Vec<HandlerArgument>) -> proc_macro2::TokenStream {
 }
 
 fn get_public_token(public: &syn::Visibility) -> proc_macro2::TokenStream {
-    let public: proc_macro2::TokenStream = match public {
-        syn::Visibility::Public(_) => "pub ".parse().unwrap(),
-        _ => "".parse().unwrap(),
-    };
-    public
+    public.to_token_stream()
 }
 
 fn get_path_params_token(
